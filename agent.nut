@@ -17,7 +17,7 @@ local STATION_PW = "password"; //Note that you must only use alphanumerics in yo
 local sparkfun_publicKey = "dZ4EVmE8yGCRGx5XRX1W";
 local sparkfun_privateKey = "privatekey";
 
-local LOCAL_ALTITUDE_METERS = 1638; //Accurate for the roof on my house
+local LOCAL_ALTITUDE_METERS = 1871; //verify with GPS
 
 local midnightReset = false; //Keeps track of a once per day cumulative rain reset
 
@@ -385,6 +385,7 @@ device.on("postToInternet", function(dataString) {
     //Push to SparkFun
     local request = http.get(bigString);
     local response = request.sendsync();
+    //server.log("Sparkfun string: " + bigString);
     server.log("SparkFun response = " + response.body);
 
     //Check to see if we need to send a midnight reset
@@ -469,6 +470,9 @@ function recordLevels(batt, light) {
 }
 
 //Given pressure in pascals, convert the pressure to Altimeter Setting, inches mercury
+//does wunderground expect "altimeter setting"?
+// see: http://www.crh.noaa.gov/bou/awebphp/definitions_pressure.php
+// and: http://www.srh.noaa.gov/epz/?n=wxcalc_altimetersetting
 function convertToInHg(pressure_Pa)
 {
     local pressure_mb = pressure_Pa / 100; //pressure is now in millibars, 1 pascal = 0.01 millibars
@@ -556,7 +560,7 @@ function calcLocalTime()
     if(hour == 0) hour = 12; //Midnight edge case
 
     currentTime = format("%02d", hour) + "%3A" + format("%02d", currentTime.min) + "%3A" + format("%02d", currentTime.sec) + "%20" + AMPM;
-    //server.log("Local time: " + currentTime);
+    server.log("Local time: " + currentTime);
     return(currentTime);
 }
 

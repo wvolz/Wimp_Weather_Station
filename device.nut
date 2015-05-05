@@ -374,7 +374,7 @@ SERIAL.configure(9600, 8, PARITY_NONE, 1, NO_CTSRTS); // 9600 baud worked well, 
 // Start this party going!
 checkWeather();
 
-//Power down the imp to low power mode, then wake up after 10 seconds
+//Power down the imp to low power mode, then wake up after 60 seconds
 //Wunderground has a minimum of 2.5 seconds between Rapidfire reports
 imp.onidle(function() {
   server.log("Nothing to do, going to sleep for 60 seconds");
