@@ -363,6 +363,8 @@ function checkWeather() {
     agent.send("postToInternet", incomingStream);
 
     //imp.wakeup(10.0, checkWeather);
+    //DEBUG 05052015
+    server.log("RSSI: " + imp.rssi() )
 }
 
 //These are needed for the wireless reprogramming
@@ -376,7 +378,7 @@ checkWeather();
 
 //Power down the imp to low power mode, then wake up after 60 seconds
 //Wunderground has a minimum of 2.5 seconds between Rapidfire reports
-imp.onidle(function() {
-  server.log("Nothing to do, going to sleep for 60 seconds");
-  server.sleepfor(60);
+imp.onidle(function () {
+    server.log("Nothing to do, going to sleep for 60 seconds");
+    server.sleepfor(60);
 });
