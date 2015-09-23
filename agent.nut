@@ -513,7 +513,8 @@ function mysplit(a, b) {
 function calcLocalTime()
 {
     //Get the time that this measurement was taken
-    local currentTime = date(time(), 'u');
+    // imp squirrel doesn't support the second argument to date so removed (WV)
+    local currentTime = date(time());
     local hour = currentTime.hour; //Most of the work will be on the current hour
 
     //Since 2007 DST starts on the second Sunday in March and ends the first Sunday of November
