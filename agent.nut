@@ -426,6 +426,19 @@ function calcDewPoint(relativeHumidity, tempF) {
     return(dewPoint);
 }
 
+// adjust hour for DST if needed
+function adjust_hour_dst(hour)
+{
+    local output_hour = hour;
+    local utc_month = date().month;
+    if(utc_month > 3 && utc_month < 11)
+    {
+        //DST is happening!
+        output_hour++;
+    }
+    return output_hour;
+}
+
 function checkMidnight(ignore) {
     //Check to see if it's midnight. If it is, send @ to Arduino to reset time based variables
 
