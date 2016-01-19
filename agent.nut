@@ -11,11 +11,11 @@
 // Example incoming serial string from device:
 // $,winddir=270,windspeedmph=0.0,windgustmph=0.0,windgustdir=0,windspdmph_avg2m=0.0,winddir_avg2m=12,windgustmph_10m=0.0,windgustdir_10m=0,humidity=998.0,tempf=-1766.2,rainin=0.00,dailyrainin=0.00,pressure=-999.00,batt_lvl=16.11,light_lvl=3.32,#
 
-local STATION_ID = "KCOBOULD95";
 local STATION_PW = "password"; //Note that you must only use alphanumerics in your password. Http post won't work otherwise.
+local STATION_ID = "KCOCOLOR290";
 
-local sparkfun_publicKey = "dZ4EVmE8yGCRGx5XRX1W";
 local sparkfun_privateKey = "privatekey";
+local sparkfun_publicKey = "yAAXOXw6RZhpJ4XoxzRW";
 
 local LOCAL_ALTITUDE_METERS = 1871; //verify with GPS
 
