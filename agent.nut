@@ -401,7 +401,7 @@ function windCorrect(direction) {
 
     //My station's North arrow is pointing due west
     //So correct by 90 degrees
-    local dir = temp[1].tointeger() - 90;
+    local dir = temp[1].tointeger() + 90;
     if(dir < 0) dir += 360;
     return(temp[0] + "=" + dir);
 }
