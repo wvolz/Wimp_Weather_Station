@@ -340,7 +340,7 @@ device.on("postToInternet", function(dataString) {
     //bigString += "&" + clouds;
     bigString += "&" + "softwaretype=SparkFunWeatherImp"; //Cause we can
     bigString += "&" + "realtime=1"; //You better believe it!
-    bigString += "&" + "rtfreq=10"; //Set rapid fire freq to once every 10 seconds
+    bigString += "&" + "rtfreq=60"; //Set rapid fire freq to once every 60 seconds
     bigString += "&" + "action=updateraw";
 
     //server.log("string to send: " + bigString);
