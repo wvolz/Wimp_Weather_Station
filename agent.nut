@@ -558,6 +558,10 @@ function calcLocalTime()
         hour -= 12; //Get rid of military time
         AMPM = "PM";
     }
+    else if (hour == 12)
+    {
+        AMPM = "PM";
+    }
     if(hour == 0) hour = 12; //Midnight edge case
 
     currentTime = format("%02d", hour) + "%3A" + format("%02d", currentTime.min) + "%3A" + format("%02d", currentTime.sec) + "%20" + AMPM;
