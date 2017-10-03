@@ -26,8 +26,8 @@
 
 #include <avr/wdt.h> //We need watch dog for this program
 #include <Wire.h> //I2C needed for sensors
-#include "MPL3115A2.h" //Pressure sensor
-#include "HTU21D.h" //Humidity sensor
+#include "SparkFunMPL3115A2.h" //Pressure sensor
+#include "SparkFunHTU21D.h" //Humidity sensor
 
 //#define ENABLE_LIGHTNING
 
