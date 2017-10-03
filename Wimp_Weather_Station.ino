@@ -31,6 +31,8 @@
 
 //#define ENABLE_LIGHTNING
 
+#define VERSION "1.2.1-KD5YPH"
+
 //SoftwareSerial imp(8, 9); // RX, TX into Imp pin 7
 
 MPL3115A2 myPressure; //Create an instance of the pressure sensor
@@ -42,6 +44,8 @@ HTU21D myHumidity; //Create an instance of the humidity sensor
 const byte WSPEED = 3;
 const byte RAIN = 2;
 const byte STAT1 = 7;
+const byte CHARGE_STATUS = 10;
+const byte CHARGE_FAULT = 9;
 
 #ifdef ENABLE_LIGHTNING
 const byte LIGHTNING_IRQ = 4; //Not really an interrupt pin, we will catch it in software
@@ -112,6 +116,8 @@ volatile float dailyrainin; // [rain inches so far today in local time]
 //float baromin = 30.03;// [barom in] - It's hard to calculate baromin locally, do this in the agent
 float pressure;
 //float dewptf; // [dewpoint F] - It's hard to calculate dewpoint locally, do this in the agent
+bool charge_status = false;
+bool charge_fault = false;
 
 //These are not wunderground values, they are just for us
 float batt_lvl = 11.8;
@@ -167,6 +173,10 @@ void setup()
 
 	pinMode(STAT1, OUTPUT);
 
+    // for sunny buddy status monitoring
+    pinMode(CHARGE_STATUS, INPUT);
+    pinMode(CHARGE_FAULT, INPUT);
+
 	midnightReset(); //Reset rain totals
 
 	//Configure the pressure sensor
@@ -193,7 +203,9 @@ void setup()
 	// turn on interrupts
 	interrupts();
 
-	Serial.println("Wimp Weather Station online!");
+	Serial.print("Wimp Weather Station v");
+	Serial.print(VERSION);
+	Serial.println(" online!");
 	reportWeather();
 
 	//  wdt_enable(WDTO_1S); //Unleash the beast
@@ -527,10 +539,25 @@ int get_wind_direction()
 	return (-1); // error, disconnected?
 }
 
+void get_sunnybuddy_status()
+{
+    // gets status of sunny buddy charge + fault pins
+    charge_status = false;
+    charge_fault = false;
+
+    if(digitalRead(CHARGE_STATUS) == LOW)
+        charge_status = true;
+
+    if(digitalRead(CHARGE_FAULT) == LOW)
+      charge_fault = true;
+}
+
 //Reports the weather string to the Imp
 void reportWeather()
 {
 	calcWeather(); //Go calc all the various sensors
+
+    get_sunnybuddy_status();
 
 	Serial.print("$,winddir=");
 	Serial.print(winddir);
@@ -567,6 +594,16 @@ void reportWeather()
 	Serial.print(",lightning_distance=");
 	Serial.print(lightning_distance);
 #endif
+
+  //print charge/fault status of solar charger
+  Serial.print(",charge=");
+  Serial.print(charge_status);
+  Serial.print(",charge_fault=");
+  Serial.print(charge_fault);
+
+  //output sketch version
+  Serial.print(",version=");
+  Serial.print(VERSION);
 
 	Serial.print(",");
 	Serial.println("#,");

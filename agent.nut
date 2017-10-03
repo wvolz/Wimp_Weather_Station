@@ -9,7 +9,7 @@
 //          If you find it handy, and we meet some day, you can buy me a beer or iced tea in return.
 
 // Example incoming serial string from device:
-// $,winddir=270,windspeedmph=0.0,windgustmph=0.0,windgustdir=0,windspdmph_avg2m=0.0,winddir_avg2m=12,windgustmph_10m=0.0,windgustdir_10m=0,humidity=998.0,tempf=-1766.2,rainin=0.00,dailyrainin=0.00,pressure=-999.00,batt_lvl=16.11,light_lvl=3.32,#
+// $,winddir=270,windspeedmph=0.0,windgustmph=0.0,windgustdir=0,windspdmph_avg2m=0.0,winddir_avg2m=12,windgustmph_10m=0.0,windgustdir_10m=0,humidity=998.0,tempf=-1766.2,rainin=0.00,dailyrainin=0.00,pressure=-999.00,batt_lvl=16.11,light_lvl=3.32,charge=1,charge_fault=0#
 
 local STATION_PW = "password"; //Note that you must only use alphanumerics in your password. Http post won't work otherwise.
 local STATION_ID = "KCOCOLOR290";
@@ -241,9 +241,9 @@ device.on("postToInternet", function(dataString) {
     //Break the incoming string into pieces by comma
     a <- mysplit(dataString,',');
 
-    if(a[0] != "$" || a[16] != "#")
+    if(a[0] != "$" || a[19] != "#")
     {
-        server.log(format("Error: incorrect frame received (%s, %s)", a[0], a[16]));
+        server.log(format("Error: incorrect frame received (%s, %s)", a[0], a[19]));
         server.log(format("Received: %s)", dataString));
         return(0);
     }
@@ -266,9 +266,13 @@ device.on("postToInternet", function(dataString) {
     local pressure = a[13].tofloat();
     local batt_lvl = a[14];
     local light_lvl = a[15];
-    //a[16] is #
+    local charge = a[16];
+    local charge_fault = a[17];
+    //a[19] is #
 
     server.log(tempf);
+    server.log(charge);
+    server.log(charge_fault);
 
     //Correct for the actual orientation of the weather station
     //For my station the north indicator is pointing due west
@@ -355,7 +359,7 @@ device.on("postToInternet", function(dataString) {
     local localMeasurementTime = "measurementtime=" + calcLocalTime();
 
     //Now post to data.sparkfun.com
-    //Here is a list of datums: measurementTime, winddir, windspeedmph, windgustmph, windgustdir, windspdmph_avg2m, winddir_avg2m, windgustmph_10m, windgustdir_10m, humidity, tempf, rainin, dailyrainin, baromin, dewptf, batt_lvl, light_lvl
+    //Here is a list of datums: measurementTime, winddir, windspeedmph, windgustmph, windgustdir, windspdmph_avg2m, winddir_avg2m, windgustmph_10m, windgustdir_10m, humidity, tempf, rainin, dailyrainin, baromin, dewptf, batt_lvl, light_lvl, charge_status, charge_fault
 
     //Now we form the large string to pass to sparkfun
     local strSparkFun = "http://data.sparkfun.com/input/";
@@ -381,6 +385,8 @@ device.on("postToInternet", function(dataString) {
     bigString += "&" + dewptf;
     bigString += "&" + batt_lvl;
     bigString += "&" + light_lvl;
+    bigString += "&" + charge;
+    bigString += "&" + charge_fault;
 
     //Push to SparkFun
     local request = http.get(bigString);
