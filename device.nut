@@ -317,10 +317,10 @@ function checkWeather() {
         result = SERIAL.read(); //Wait for a new character to arrive
 
         imp.sleep(0.01);
-        if(counter++ > 200) //2 seconds
+        if(counter++ > 250) //2.5 seconds
         {
             server.log("Serial timeout error initial");
-            return(0); //Bail after 2000ms max wait
+            return(0); //Bail after 2500ms max wait
         }
     }
     //server.log("Counter: " + counter);
