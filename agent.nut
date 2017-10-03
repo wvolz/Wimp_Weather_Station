@@ -311,7 +311,7 @@ device.on("postToInternet", function(dataString) {
     local dewptf = "dewptf=" + calcDewPoint(currentHumidity[1].tointeger(), currentTempF[1].tointeger());
 
     //Now we form the large string to pass to wunderground
-    local strMainSite = "http://rtupdate.wunderground.com/weatherstation/updateweatherstation.php";
+    local strMainSite = "https://rtupdate.wunderground.com/weatherstation/updateweatherstation.php";
 
     local strID = "ID=" + STATION_ID;
     local strPW = "PASSWORD=" + STATION_PW;
