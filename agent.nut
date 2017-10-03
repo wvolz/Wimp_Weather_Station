@@ -530,8 +530,8 @@ function recordLevels(batt, light) {
 
 //Given pressure in pascals, convert the pressure to Altimeter Setting, inches mercury
 //does wunderground expect "altimeter setting"?
-// see: http://www.crh.noaa.gov/bou/awebphp/definitions_pressure.php
-// and: http://www.srh.noaa.gov/epz/?n=wxcalc_altimetersetting
+// see: http://www.weather.gov/bou/pressure_definitions
+// and: https://www.weather.gov/epz/wxcalc_altimetersetting
 function convertToInHg(pressure_Pa)
 {
     local pressure_mb = pressure_Pa / 100; //pressure is now in millibars, 1 pascal = 0.01 millibars
