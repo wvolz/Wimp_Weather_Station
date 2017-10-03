@@ -188,7 +188,7 @@ http.onrequest(function (req, res) {
                 } else {
                     device.on("done", function(ready) {
                         res.header("Location", http.agenturl());
-                        res.send(302, "HEX file uploaded");                        
+                        res.send(302, "HEX file uploaded");
                         server.log("Programming completed")
                     })
                     server.log("Programming started")
@@ -443,12 +443,22 @@ function checkMidnight(ignore) {
     //Check to see if it's midnight. If it is, send @ to Arduino to reset time based variables
 
     //Get the local time that this measurement was taken
-    local localTime = calcLocalTime(); 
-    
+    //local localTime = calcLocalTime();
+
     //server.log("Local hour = " + format("%c", localTime[0]) + format("%c", localTime[1]));
 
-    if(localTime[0].tochar() == "0" && localTime[1].tochar() == "4")
+    local utcHour = date().hour;
+    //server.log("UTC Hour = " + utcHour);
+    // adjust hour for DST
+    utcHour = adjust_hour_dst(utcHour);
+    // adjust hour for localtz
+    local localHour = utcHour - local_hour_offset;
+    //server.log("local Hour = " + localHour);
+
+    if (localHour == 0)
     {
+    //if(localTime[0].tochar() == "0" && localTime[1].tochar() == "1")
+    //{
         if(midnightReset == false)
         {
             server.log("Sending midnight reset");
