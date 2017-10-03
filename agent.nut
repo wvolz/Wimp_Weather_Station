@@ -350,7 +350,7 @@ device.on("postToInternet", function(dataString) {
     //server.log("string to send: " + bigString);
 
     //Push to Wunderground
-    local request = http.post(bigString, {}, "");
+    local request = http.get(bigString);
     local response = request.sendsync();
     server.log("Wunderground response = " + response.body);
     server.log(batt_lvl + " " + light_lvl);
