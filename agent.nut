@@ -17,6 +17,9 @@ local STATION_ID = "KCOCOLOR290";
 local sparkfun_privateKey = "privatekey";
 local sparkfun_publicKey = "yAAXOXw6RZhpJ4XoxzRW";
 
+local PWS_STATION_ID = "KCOCOL290";
+local PWS_STATION_PW = "password";
+
 local LOCAL_ALTITUDE_METERS = 1871; //verify with GPS
 
 local midnightReset = false; //Keeps track of a once per day cumulative rain reset
@@ -393,6 +396,33 @@ device.on("postToInternet", function(dataString) {
     local response = request.sendsync();
     //server.log("Sparkfun string: " + bigString);
     server.log("SparkFun response = " + response.body);
+
+    //push to pws (pwsweather.com)
+    local strPWS = "https://www.pwsweather.com/pwsupdate/pwsupdate.php";
+
+    bigString = strPWS;
+    bigString += "?ID=" + PWS_STATION_ID;
+    //"&PASSWORD=" + PWS_STATION_PW;
+    bigString += "&" + http.urlencode({"PASSWORD" : PWS_STATION_PW});
+    bigString += "&" + strCT;
+    bigString += "&" + baromin;
+    bigString += "&" + dailyrainin;
+    bigString += "&" + dewptf;
+    bigString += "&" + humidity;
+    bigString += "&" + rainin;
+    bigString += "&" + tempf;
+    bigString += "&" + winddir;
+    bigString += "&" + windgustmph;
+    bigString += "&" + windspeedmph;
+    bigString += "&action=updateraw";
+    bigString += "&softwaretype=SparkFunWeatherImp";
+    
+    //server.log("PWS string = " + bigString);
+    local request = http.get(bigString);
+    local response = request.sendsync();
+    server.log("PWS response = " + response.statuscode);
+    // NOTE reply is a full HTML page, with info below in it upon success, switch to status code reporting only
+    // TODO handle error reply? Will return 200 OK and "Data Logged and posted in METAR mirror." if ok?
 
     //Check to see if we need to send a midnight reset
     checkMidnight(1);
