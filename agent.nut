@@ -277,6 +277,7 @@ device.on("postToInternet", function(dataString) {
     server.log(tempf);
     server.log(charge);
     server.log(charge_fault);
+    server.log(batt_lvl + " " + light_lvl);
 
     //Correct for the actual orientation of the weather station
     //For my station the north indicator is pointing due west
@@ -355,9 +356,9 @@ device.on("postToInternet", function(dataString) {
 
     //Push to Wunderground
     local request = http.get(bigString);
-    local response = request.sendsync();
-    server.log("Wunderground response = " + response.body);
-    server.log(batt_lvl + " " + light_lvl);
+    request.sendasync(function(response) {
+        server.log("Wunderground response = " + response.body); 
+    });
 
     //push to pws (pwsweather.com)
     local strPWS = "https://www.pwsweather.com/pwsupdate/pwsupdate.php";
@@ -381,10 +382,11 @@ device.on("postToInternet", function(dataString) {
     
     //server.log("PWS string = " + bigString);
     local request = http.get(bigString);
-    local response = request.sendsync();
-    server.log("PWS response = " + response.statuscode);
-    // NOTE reply is a full HTML page, with info below in it upon success, switch to status code reporting only
-    // TODO handle error reply? Will return 200 OK and "Data Logged and posted in METAR mirror." if ok?
+    request.sendasync(function(response) {
+        server.log("PWS response = " + response.statuscode);
+        // NOTE reply is a full HTML page, with info below in it upon success, switch to status code reporting only
+        // TODO handle error reply? Will return 200 OK and "Data Logged and posted in METAR mirror." if ok?
+    });
 
     // post data to wimpdata repository
     local d = date();
@@ -416,16 +418,17 @@ device.on("postToInternet", function(dataString) {
         "dev_fw_version": part_after_equal(dev_sw_version)
     };
     local wrequest = http.post(wimplog_url, headers, http.jsonencode(jsondata));
-    local wresponse = wrequest.sendsync();
-    server.log("WIMPdata response = " + wresponse.statuscode);
-    if (wresponse.statuscode != 201) {
-        server.log("WIMPdata response body: " + wresponse.body);
-    }
+    wrequest.sendasync(function(response) {
+        server.log("WIMPdata response = " + response.statuscode);
+        if (response.statuscode != 201) {
+            server.log("WIMPdata response body: " + response.body);
+        }
+    });
         
     //Check to see if we need to send a midnight reset
     checkMidnight(1);
 
-    server.log("Update complete!");
+    server.log("postToInternet complete");
 });
 
 //Given a string, break out the direction, correct by some value
