@@ -14,6 +14,8 @@
 local STATION_PW = "password"; //Note that you must only use alphanumerics in your password. Http post won't work otherwise.
 local STATION_ID = "KCOCOLOR290";
 
+local wimplog_token = "";
+local wimplog_url = "";
 
 local PWS_STATION_ID = "KCOCOL290";
 local PWS_STATION_PW = "password";
@@ -384,6 +386,42 @@ device.on("postToInternet", function(dataString) {
     // NOTE reply is a full HTML page, with info below in it upon success, switch to status code reporting only
     // TODO handle error reply? Will return 200 OK and "Data Logged and posted in METAR mirror." if ok?
 
+    // post data to wimpdata repository
+    local d = date();
+    local utc_string = format("%04d-%02d-%02d %02d:%02d:%02dZ", d.year, d.month+1, d.day, d.hour, d.min, d.sec);
+    local headers = {
+        "Authorization": "Token " + wimplog_token,
+        "Content-Type": "application/json"
+    };    
+    local jsondata = {
+        "measured_at": utc_string,
+        "win_dir": part_after_equal(winddir),
+        "wind_speed_mph": part_after_equal(windspeedmph),
+        "wind_gust_mph": part_after_equal(windgustmph),
+        "wind_gust_dir": part_after_equal(windgustdir),
+        "wind_speed_mph_avg2m": part_after_equal(windspdmph_avg2m),
+        "wind_dir_avg2m": part_after_equal(winddir_avg2m),
+        "wind_gust_mph_10m": part_after_equal(windgustmph_10m),
+        "wind_gust_dir_10m": part_after_equal(windgustdir_10m),
+        "humidity": part_after_equal(humidity),
+        "tempf": part_after_equal(tempf),
+        "rain_in": part_after_equal(rainin),
+        "daily_rain_in": part_after_equal(dailyrainin),
+        "barometer_in": part_after_equal(baromin),
+        "dewpoint_f": part_after_equal(dewptf),
+        "battery_level": part_after_equal(batt_lvl),
+        "light_level": part_after_equal(light_lvl),
+        "charging": part_after_equal(charge),
+        "charge_fault": part_after_equal(charge_fault),
+        "dev_fw_version": part_after_equal(dev_sw_version)
+    };
+    local wrequest = http.post(wimplog_url, headers, http.jsonencode(jsondata));
+    local wresponse = wrequest.sendsync();
+    server.log("WIMPdata response = " + wresponse.statuscode);
+    if (wresponse.statuscode != 201) {
+        server.log("WIMPdata response body: " + wresponse.body);
+    }
+        
     //Check to see if we need to send a midnight reset
     checkMidnight(1);
 
@@ -667,4 +705,18 @@ function day_of_week(year, month, day)
  return (year + year/4 - year/100 + year/400 + t[month-1] + day) % 7;
    //return 4;
    */
+}
+
+function part_after_equal(a) {
+  return rslice(a, "=");
+}
+
+// should return the part in string a after b
+function rslice(a, b) {
+  local ret = "";
+  local i = a.find(b);
+  if (i != null) {
+      ret = a.slice(i+1)
+  }
+  return ret;
 }
