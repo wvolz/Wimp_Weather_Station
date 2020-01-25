@@ -269,6 +269,7 @@ device.on("postToInternet", function(dataString) {
     local light_lvl = a[15];
     local charge = a[16];
     local charge_fault = a[17];
+    local dev_sw_version = a[18];
     //a[19] is #
 
     server.log(tempf);
