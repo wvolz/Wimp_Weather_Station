@@ -21,13 +21,14 @@ local NOCHAR = -1;
 server.log("Device started, impee_id " + hardware.getdeviceid());
 
 local netData = imp.net.info();
-local rssi = 0;
 if ("active" in netData) {
     // We know this is going to only be via WiFi based on type of imp used here
     local ip = netData.ipv4.address;
     local mac = netData.interface[netData.active].macaddress;
     local rssi = netData.interface[netData.active].rssi;
     server.log("Connected to WIFI with ip " + ip + " and mac " + mac);
+    //DEBUG 05052015
+    server.log("RSSI: " + rssi );
 }
 
 //------------------------------------------------------------------------------------------------------------------------------
@@ -373,8 +374,6 @@ function checkWeather() {
     agent.send("postToInternet", incomingStream);
 
     //imp.wakeup(10.0, checkWeather);
-    //DEBUG 05052015
-    server.log("RSSI: " + rssi );
 }
 
 //These are needed for the wireless reprogramming
