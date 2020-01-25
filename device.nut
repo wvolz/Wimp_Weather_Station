@@ -371,7 +371,8 @@ function checkWeather() {
     ACTIVITY.write(1); //TX LED off
 
     // Send info to agent, that will in turn push to internet
-    agent.send("postToInternet", incomingStream);
+    local rc = agent.send("postToInternet", incomingStream);
+    server.log("RC from agent sent = " + rc);
 
     //imp.wakeup(10.0, checkWeather);
 }
