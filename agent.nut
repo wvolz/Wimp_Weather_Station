@@ -320,7 +320,7 @@ device.on("postToInternet", function(dataString) {
 
     //Form the current date/time
     //Note: .month is 0 to 11!
-    local currentTime = date(time(), 'u');
+    local currentTime = date(time());
     local strCT = "dateutc=";
     strCT += currentTime.year + "-" + format("%02d", currentTime.month + 1) + "-" + format("%02d", currentTime.day);
     strCT += "+" + format("%02d", currentTime.hour) + "%3A" + format("%02d", currentTime.min) + "%3A" + format("%02d", currentTime.sec);
