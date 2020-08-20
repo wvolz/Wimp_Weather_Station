@@ -397,7 +397,7 @@ device.on("postToInternet", function(dataString) {
     };    
     local jsondata = {
         "measured_at": utc_string,
-        "win_dir": part_after_equal(winddir),
+        "wind_dir": part_after_equal(winddir),
         "wind_speed_mph": part_after_equal(windspeedmph),
         "wind_gust_mph": part_after_equal(windgustmph),
         "wind_gust_dir": part_after_equal(windgustdir),
