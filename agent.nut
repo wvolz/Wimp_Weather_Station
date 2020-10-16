@@ -422,6 +422,9 @@ device.on("postToInternet", function(dataString) {
         server.log("WIMPdata response = " + response.statuscode);
         if (response.statuscode != 201) {
             server.log("WIMPdata response body: " + response.body);
+            foreach (header in response.rawheaders) {
+                server.log(header.k + ":" + header.v);
+            }
         }
     });
         
