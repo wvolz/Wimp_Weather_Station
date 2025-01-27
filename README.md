@@ -1,7 +1,7 @@
 Wimp Weather Station
 =========================
 
-[![Wimp Weather Station](https://cdn.sparkfun.com/r/600-600/assets/learn_tutorials/2/1/7/Setup-4.jpg)](https://cdn.sparkfun.com/assets/learn_tutorials/2/1/7/Setup-4.jpg)
+**Note: This has been customized for my use case**
 
 [*A wireless weather station based on the Electric Imp*](https://learn.sparkfun.com/tutorials/weather-station-wirelessly-connected-to-wudnerground)
 
@@ -17,6 +17,6 @@ The sketch to be loaded onto the Arduino is called *Wimp_Weather_Station.ino*. T
 License Information
 -------------------
 The hardware is released under [Creative Commons ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/).
-The code is beerware; if you see me (or any other SparkFun employee) at the local, and you've found our code helpful, please buy us a round!
+The code is beerware; if you see me (or any other contributor) at the local, and you've found our code helpful, please buy us a round!
 
 Distributed as-is; no warranty is given.
